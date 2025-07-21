@@ -36,7 +36,7 @@ class favoriteAnimeRepository {
     const [rows] = await databaseClient.query(
       `SELECT fa.anime_id, a.title, a.portrait
      FROM favorite_anime fa
-     JOIN Anime a ON fa.anime_id = a.id
+     JOIN anime a ON fa.anime_id = a.id
      WHERE fa.users_id = ?`,
       [users_id],
     );

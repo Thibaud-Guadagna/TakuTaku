@@ -95,7 +95,7 @@ class AnimeRepository {
       GROUP_CONCAT(t.id) as tid 
     FROM anime a 
     INNER JOIN anime_type at ON a.id = at.anime_id 
-    INNER JOIN Type t ON at.type_id = t.id 
+    INNER JOIN type t ON at.type_id = t.id 
     ${whereSQL}
     GROUP BY a.id, a.title, a.synopsis, a.genre_id, a.portrait
   `;
@@ -142,13 +142,13 @@ class AnimeRepository {
     const [rows] = await databaseClient.query(
       `SELECT a.id, a.title, a.synopsis, a.portrait, a.date, a.paysage, a.video, g.name AS genre_name
       FROM anime As a
-      LEFT JOIN Genre AS g ON a.genre_id = g.id`,
+      LEFT JOIN genre AS g ON a.genre_id = g.id`,
     );
     return rows;
   }
   async readAllWithNote() {
     const [rows] = await databaseClient.query(
-      "SELECT a.id, a.title, ROUND(AVG(n.note), 1) AS note FROM anime AS a LEFT JOIN Note AS n ON n.anime_id = a.id GROUP BY a.id, a.title ORDER BY note DESC",
+      "SELECT a.id, a.title, ROUND(AVG(n.note), 1) AS note FROM anime AS a LEFT JOIN note AS n ON n.anime_id = a.id GROUP BY a.id, a.title ORDER BY note DESC",
     );
     return rows;
   }
