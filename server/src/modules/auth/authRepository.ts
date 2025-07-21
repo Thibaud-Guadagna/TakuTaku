@@ -16,7 +16,7 @@ class authRepository {
   async create(user: Omit<Auth, "id">) {
     // Création d'un nouvel utilisateur
     const [result] = await databaseClient.query<Result>(
-      "INSERT INTO Users (firstname, lastname, mail, password, abonnement_id) VALUES (?, ?, ?, ?, ?, ?, ?)",
+      "INSERT INTO users (firstname, lastname, mail, password, abonnement_id) VALUES (?, ?, ?, ?, ?, ?, ?)",
       [
         user.firstname,
         user.lastname,
@@ -35,7 +35,7 @@ class authRepository {
   async read(id: number) {
     // Exécute la requête SQL pour lire un utilisateur par son id
     const [rows] = await databaseClient.query<Rows>(
-      "SELECT * FROM Users WHERE id = ?",
+      "SELECT * FROM users WHERE id = ?",
       [id],
     );
     // Retourne la première ligne du résultat de la requête
@@ -44,7 +44,7 @@ class authRepository {
 
   async readAll() {
     // Exécute la requête SQL pour lire tout le tableau de la table "Users"
-    const [rows] = await databaseClient.query<Rows>("select * from Users");
+    const [rows] = await databaseClient.query<Rows>("select * from users");
     // Retournes le tableau d'éléments
     return rows as Auth[];
   }
@@ -52,7 +52,7 @@ class authRepository {
   async signIn(mail: string, password: string) {
     // Exécute la requête SQL pour lire un utilisateur par son mail et mot de passe
     const [rows] = await databaseClient.query<Rows>(
-      "select * FROM Users where mail = ? AND password = ?",
+      "select * FROM users where mail = ? AND password = ?",
       [mail, password],
     );
     //Retourne la première ligne du résultat de la requête ou undefined si aucun utilisateur n'est trouvé

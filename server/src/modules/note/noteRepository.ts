@@ -14,7 +14,7 @@ class noteRepository {
   async create(note: Omit<Note, "id">) {
     // Création d'une nouvelle note
     const [result] = await databaseClient.query<Result>(
-      "INSERT INTO Note ( users_id, anime_id, note) values (?, ?, ?)",
+      "INSERT INTO note ( users_id, anime_id, note) values (?, ?, ?)",
       [note.users_id, note.anime_id, note.note],
     );
     //Retourne l'ID de la nouvelle note inséré
@@ -25,7 +25,7 @@ class noteRepository {
   async read(anime_id: number) {
     // Récupère la note
     const [noteRows] = await databaseClient.query<Rows>(
-      "SELECT AVG(note) AS average FROM Note WHERE anime_id = ?",
+      "SELECT AVG(note) AS average FROM note WHERE anime_id = ?",
       [anime_id],
     );
     // Retourne la note moyenne
@@ -34,7 +34,7 @@ class noteRepository {
 
   async readAll() {
     // Exécute la requête SQL pour lire tout le tableau de la table "Note"
-    const [rows] = await databaseClient.query<Rows>("SELECT * FROM Note");
+    const [rows] = await databaseClient.query<Rows>("SELECT * FROM note");
 
     // Return the array of items
     return rows as Note[];
@@ -44,7 +44,7 @@ class noteRepository {
   async update(note: Omit<Note, "id">) {
     // Exécute la requête SQL pour lire tout le tableau de la table "Anime"
     const [result] = await databaseClient.query<Result>(
-      "UPDATE Note SET note = ? WHERE anime_id = ? AND users_id = ?",
+      "UPDATE note SET note = ? WHERE anime_id = ? AND users_id = ?",
       [note.note, note.anime_id, note.users_id],
     );
 

@@ -12,7 +12,7 @@ class TypeRepository {
   async create(type: Omit<Type, "id">) {
     // Création d'un nouvel animé
     const [result] = await databaseClient.query<Result>(
-      "INSERT INTO Type (name) values (?)",
+      "INSERT INTO type (name) values (?)",
       [type.name],
     );
     //Retourne l'ID du nouveau type inséré
@@ -22,7 +22,7 @@ class TypeRepository {
   async read(id: number) {
     // Execute la requête SQL pour lire un item spécifique par son ID
     const [rows] = await databaseClient.query<Rows>(
-      "SELECT * FROM Type WHERE id = ?",
+      "SELECT * FROM type WHERE id = ?",
       [id],
     );
     //Retourne la première ligne du résultat de la requête
@@ -30,7 +30,7 @@ class TypeRepository {
   }
   async readAll() {
     // Exécute la requête SQL pour lire tout le tableau de la table "type"
-    const [rows] = await databaseClient.query<Rows>("SELECT * FROM Type");
+    const [rows] = await databaseClient.query<Rows>("SELECT * FROM type");
 
     // Retourne le tableau d'items
     return rows as Type[];
@@ -40,7 +40,7 @@ class TypeRepository {
   async update(type: Type) {
     // Exécute la requête SQL pour lire tout le tableau de la table "Type"
     const [reesult] = await databaseClient.query<Result>(
-      "DELETE FROM Type WHERE id = ?",
+      "DELETE FROM type WHERE id = ?",
       [type.name, type.id],
     );
 
@@ -52,7 +52,7 @@ class TypeRepository {
   async delete(id: number) {
     // Exécute la requête SQL pour supprimer un type spécifique par son ID
     const [result] = await databaseClient.query<Result>(
-      "DELETE FROM Type WHERE id = ?",
+      "DELETE FROM type WHERE id = ?",
       [id],
     );
     // Retourne le nombre de lignes affectées par la suppression

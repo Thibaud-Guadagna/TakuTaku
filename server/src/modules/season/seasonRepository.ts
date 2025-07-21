@@ -13,7 +13,7 @@ class SeasonRepository {
   async create(season: Omit<Season, "id">) {
     // Création d'une nouvelle saison
     const [result] = await databaseClient.query<Result>(
-      "INSERT INTO Season (number, anime_id) VALUES (?, ?)",
+      "INSERT INTO season (number, anime_id) VALUES (?, ?)",
       [season.number, season.anime_id],
     );
     // Retourne l'ID de la nouvelle saison insérée
@@ -24,7 +24,7 @@ class SeasonRepository {
   async read(id: number) {
     // Exécute la requête SQL pour lire une saison spécifique par son ID
     const [rows] = await databaseClient.query<Rows>(
-      "SELECT * FROM Season WHERE id = ?",
+      "SELECT * FROM season WHERE id = ?",
       [id],
     );
     // Retourne la première ligne du résultat de la requête
@@ -33,7 +33,7 @@ class SeasonRepository {
 
   async readAll() {
     // Exécute la requête SQL pour lire toutes les saisons
-    const [rows] = await databaseClient.query<Rows>("SELECT * FROM Season");
+    const [rows] = await databaseClient.query<Rows>("SELECT * FROM season");
     // Retourne le tableau des saisons
     return rows as Season[];
   }
@@ -42,7 +42,7 @@ class SeasonRepository {
   async update(season: Season) {
     // Exécute la requête SQL pour mettre à jour une saison existante
     const [result] = await databaseClient.query<Result>(
-      "UPDATE Season SET number = ?, anime_id = ? WHERE id = ?",
+      "UPDATE season SET number = ?, anime_id = ? WHERE id = ?",
       [season.number, season.anime_id, season.id],
     );
     return result.affectedRows > 0; // Retourne true si la mise à jour a réussi
@@ -52,7 +52,7 @@ class SeasonRepository {
   async delete(id: number) {
     // Exécute la requête SQL pour supprimer une saison par son ID
     const [result] = await databaseClient.query<Result>(
-      "DELETE FROM Season WHERE id = ?",
+      "DELETE FROM season WHERE id = ?",
       [id],
     );
     return result.affectedRows > 0; // Retourne true si la suppression a réussi

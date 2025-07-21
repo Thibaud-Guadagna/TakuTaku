@@ -24,7 +24,7 @@ class userRepository {
     try {
       // Création d'un nouveau user dans la base de données
       const [result] = await databaseClient.query<Result>(
-        "INSERT INTO Users (firstname, lastname, mail, password, is_admin, is_actif, abonnement_id) VALUES (?, ?, ?, ?, ?, ?, ?)",
+        "INSERT INTO users (firstname, lastname, mail, password, is_admin, is_actif, abonnement_id) VALUES (?, ?, ?, ?, ?, ?, ?)",
         [
           user.firstname,
           user.lastname,
@@ -47,7 +47,7 @@ class userRepository {
   async read(id: number) {
     //Exécute la requête SQL pour lire une information par son id
     const [rows] = await databaseClient.query<Rows>(
-      "select * from Users where id = ?",
+      "select * from users where id = ?",
       [id],
     );
     //Retourne la première ligne du résultat de la requête
@@ -55,7 +55,7 @@ class userRepository {
   }
   async readAll() {
     // Exécute la requête SQL pour lire tout le tableau de la table "Users"
-    const [rows] = await databaseClient.query<Rows>("select * from Users");
+    const [rows] = await databaseClient.query<Rows>("select * from users");
     // Retournes le tableau d'éléments
     return rows as User[];
   }
@@ -64,7 +64,7 @@ class userRepository {
   async update(user: User) {
     // Exécute la requête SQL pour lire tout le tableau de la table "User"
     const [result] = await databaseClient.query<Result>(
-      "UPDATE Users set firstname = ?, lastname = ?, mail = ?, is_admin = ?, is_actif = ?, abonnement_id = ? WHERE id = ?",
+      "UPDATE users set firstname = ?, lastname = ?, mail = ?, is_admin = ?, is_actif = ?, abonnement_id = ? WHERE id = ?",
       [
         user.firstname,
         user.lastname,
@@ -82,7 +82,7 @@ class userRepository {
   async delete(id: number) {
     // Exécute la requête SQL pour supprimer un user spécifique par son ID
     const [result] = await databaseClient.query<Result>(
-      "DELETE FROM Users WHERE id= ?",
+      "DELETE FROM users WHERE id= ?",
       [id],
     );
     // Retourne le nombre de lignes affectées par la suppression
@@ -96,8 +96,8 @@ class userRepository {
     const [rows] = await databaseClient.query(
       `SELECT u.id, u.firstname, u.lastname, u.mail, u.is_admin, u.is_actif,
             a.name AS abonnement_name
-      FROM Users u
-      LEFT JOIN Abonnement a ON u.abonnement_id = a.id`,
+      FROM users u
+      LEFT JOIN abonnement a ON u.abonnement_id = a.id`,
     );
     return rows;
   }
@@ -122,7 +122,7 @@ class userRepository {
     try {
       // On vérifie si l'utilisateur à déjà visionné l'animé
       const [existing] = await databaseClient.query<Rows>(
-        "SELECT * FROM Users_Anime WHERE users_id = ? AND anime_id = ?",
+        "SELECT * FROM users_anime WHERE users_id = ? AND anime_id = ?",
         [userId, animeId],
       );
       //Si on trouve déjà l'animé alors on ne l'ajoute pas à l'historique
@@ -132,7 +132,7 @@ class userRepository {
 
       // Sinon on ajoute l'animé à l'historique
       const [result] = await databaseClient.query(
-        "INSERT INTO Users_Anime (users_id, anime_id) VALUES (?, ?)",
+        "INSERT INTO users_anime (users_id, anime_id) VALUES (?, ?)",
         [userId, animeId],
       );
 
@@ -160,7 +160,7 @@ class userRepository {
   async signIn(mail: string, password: string) {
     // Exécute la requête SQL pour lire un utilisateur par son mail et mot de passe
     const [rows] = await databaseClient.query<Rows>(
-      "select * FROM Users where mail = ?",
+      "select * FROM users where mail = ?",
       [mail],
     );
     //Retourne la première ligne du résultat de la requête ou undefined si aucun utilisateur n'est trouvé
@@ -178,7 +178,7 @@ class userRepository {
   ) {
     // Exécute la requête SQL pour créer un nouvel utilisateur
     const [result] = await databaseClient.query<Result>(
-      "INSERT INTO Users (firstname, lastname, mail, password, abonnement_id, is_admin, is_actif) VALUES (?, ?, ?, ?, ?, ?, ?)",
+      "INSERT INTO users (firstname, lastname, mail, password, abonnement_id, is_admin, is_actif) VALUES (?, ?, ?, ?, ?, ?, ?)",
       [firstname, lastname, mail, passHash, abonnement_id, is_admin, is_actif],
     );
     // Retourne l'ID du nouvel utilisateur inséré
@@ -188,7 +188,7 @@ class userRepository {
   // Récupère un utilisateur depuis la base de données par son ID pour le test unitaire de suppression d'un user
   async findById(id: number) {
     const [rows] = await databaseClient.query<Rows>(
-      "SELECT * FROM Users WHERE id = ?",
+      "SELECT * FROM users WHERE id = ?",
       [id],
     );
     return (rows[0] as User) || null;
@@ -198,7 +198,7 @@ class userRepository {
   async updateProfilPicture(id: number, profil_picture_id: number) {
     // Exécute la requête SQL pour lire tout le tableau de la table "User"
     const [result] = await databaseClient.query<Result>(
-      "UPDATE Users SET profil_picture_id = ? WHERE id = ?",
+      "UPDATE users SET profil_picture_id = ? WHERE id = ?",
       [profil_picture_id, id],
     );
     // Retourne le tableau des users mis à jour
@@ -208,7 +208,7 @@ class userRepository {
   async readAllPicture() {
     // Exécute la requête SQL pour lire tout le tableau de la table "ProfilPicture"
     const [rows] = await databaseClient.query<Rows>(
-      "SELECT * FROM ProfilPicture",
+      "SELECT * FROM profilpicture",
     );
     // Retournes le tableau d'éléments
     return rows as ProfilPicture[];
@@ -217,7 +217,7 @@ class userRepository {
   // Pour récupérer le bon id picture selon l'id du user
   async readUrlPicture(userId: number) {
     const [rows] = await databaseClient.query<Rows>(
-      "SELECT profil_picture FROM ProfilPicture AS pp INNER JOIN Users AS u ON pp.id=u.profil_picture_id WHERE u.id = ?",
+      "SELECT profil_picture FROM profilpicture AS pp INNER JOIN users AS u ON pp.id=u.profil_picture_id WHERE u.id = ?",
       [userId],
     );
     return rows[0];
@@ -226,7 +226,7 @@ class userRepository {
   // Vérification de l'existence de l'e-mail en BDD pour le middleware checkEmailExists
   async findByEmail(mail: string) {
     const [rows] = await databaseClient.query<Rows>(
-      "SELECT id FROM Users WHERE mail = ?",
+      "SELECT id FROM users WHERE mail = ?",
       [mail],
     );
     return rows[0];

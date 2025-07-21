@@ -1,13 +1,13 @@
 -- SQLBook: Code
 -- Creation des tables
 -- Table Abonnement
-CREATE TABLE Abonnement (
+CREATE TABLE abonnement (
   id INT PRIMARY KEY AUTO_INCREMENT,
   name VARCHAR(100) NOT NULL
 );
 
 -- Table Genre
-CREATE TABLE Genre (
+CREATE TABLE genre (
   id INT PRIMARY KEY AUTO_INCREMENT,
   name VARCHAR(100) NOT NULL
 );
@@ -19,13 +19,13 @@ CREATE TABLE Type (
 );
 
 -- Table ProfilPicture
-CREATE TABLE ProfilPicture (
+CREATE TABLE profilpicture (
   id INT PRIMARY KEY AUTO_INCREMENT,
   profil_picture TEXT
 );
 
 -- Table Users (user est réservé, donc on peut nommer users)
-CREATE TABLE Users (
+CREATE TABLE users (
   id INT PRIMARY KEY AUTO_INCREMENT,
   firstname VARCHAR(150) NOT NULL,
   lastname VARCHAR(150) NOT NULL,
@@ -35,12 +35,12 @@ CREATE TABLE Users (
   is_actif BOOLEAN NOT NULL DEFAULT TRUE,
   abonnement_id INT NOT NULL,
   profil_picture_id INT DEFAULT 1,
-  FOREIGN KEY (abonnement_id) REFERENCES Abonnement(id),
+  FOREIGN KEY (abonnement_id) REFERENCES abonnement(id),
   FOREIGN KEY (profil_picture_id) REFERENCES ProfilPicture(id)
 );
 
 -- Table Anime
-CREATE TABLE Anime (
+CREATE TABLE anime (
   id INT PRIMARY KEY AUTO_INCREMENT,
   title VARCHAR(255) NOT NULL,
   synopsis TEXT,
@@ -49,44 +49,44 @@ CREATE TABLE Anime (
   genre_id INT NOT NULL,
   paysage TEXT,
   video TEXT,
-  FOREIGN KEY (genre_id) REFERENCES Genre(id) ON DELETE RESTRICT
+  FOREIGN KEY (genre_id) REFERENCES genre(id) ON DELETE RESTRICT
 );
 
 -- Table Note
-CREATE TABLE Note (
+CREATE TABLE note (
 id INT PRIMARY KEY AUTO_INCREMENT,
 users_id INT NOT NULL,
 anime_id INT NOT NULL, 
 note INT CHECK (note BETWEEN 0 AND 5),
-FOREIGN KEY (users_id) REFERENCES Users(id) ON DELETE CASCADE,
-FOREIGN KEY (anime_id) REFERENCES Anime(id) ON DELETE CASCADE
+FOREIGN KEY (users_id) REFERENCES users(id) ON DELETE CASCADE,
+FOREIGN KEY (anime_id) REFERENCES anime(id) ON DELETE CASCADE
 );
 
 -- Table Season
-CREATE TABLE Season (
+CREATE TABLE season (
   id INT PRIMARY KEY AUTO_INCREMENT,
   number INT NOT NULL,
   anime_id INT NOT NULL,
-  FOREIGN KEY (anime_id) REFERENCES Anime(id) ON DELETE CASCADE
+  FOREIGN KEY (anime_id) REFERENCES anime(id) ON DELETE CASCADE
 );
 
 -- Table Episode
-CREATE TABLE Episode (
+CREATE TABLE episode (
   id INT PRIMARY KEY AUTO_INCREMENT,
   number INT NOT NULL,
   title VARCHAR(150) NOT NULL,
   synopsis TEXT,
   season_id INT NOT NULL,
-  FOREIGN KEY (season_id) REFERENCES Season(id) ON DELETE CASCADE
+  FOREIGN KEY (season_id) REFERENCES season(id) ON DELETE CASCADE
 );
 
 -- Table Anime_type
-CREATE TABLE Anime_type (
+CREATE TABLE anime_type (
   id INT PRIMARY KEY AUTO_INCREMENT,
   type_id INT NOT NULL,
   anime_id INT NOT NULL,
   FOREIGN KEY (type_id) REFERENCES Type(id) ON DELETE RESTRICT,
-  FOREIGN KEY (anime_id) REFERENCES Anime(id) ON DELETE CASCADE
+  FOREIGN KEY (anime_id) REFERENCES anime(id) ON DELETE CASCADE
 );
 
 -- Table users_anime
@@ -95,8 +95,8 @@ CREATE TABLE users_anime (
   anime_id INT NOT NULL,
   users_id INT NOT NULL,
   UNIQUE (users_id, anime_id),
-  FOREIGN KEY (users_id) REFERENCES Users(id) ON DELETE CASCADE,
-  FOREIGN KEY (anime_id) REFERENCES Anime(id) ON DELETE CASCADE
+  FOREIGN KEY (users_id) REFERENCES users(id) ON DELETE CASCADE,
+  FOREIGN KEY (anime_id) REFERENCES anime(id) ON DELETE CASCADE
 );
 
 -- Table favorite_anime
@@ -104,18 +104,18 @@ CREATE TABLE favorite_anime(
   id INT PRIMARY KEY AUTO_INCREMENT,
   anime_id INT NOT NULL,
   users_id INT NOT NULL,
-  FOREIGN KEY (users_id) REFERENCES Users(id) ON DELETE CASCADE,
-  FOREIGN KEY (anime_id) REFERENCES Anime(id) ON DELETE CASCADE
+  FOREIGN KEY (users_id) REFERENCES users(id) ON DELETE CASCADE,
+  FOREIGN KEY (anime_id) REFERENCES anime(id) ON DELETE CASCADE
 );
 
 -- Requêtes d'insertion
 -- Insertion des abonnements
-INSERT INTO Abonnement (name) VALUES
+INSERT INTO abonnement (name) VALUES
 ('Découverte'),
 ('Premium');
 
 -- Insertion des genres
-INSERT INTO Genre (name) VALUES
+INSERT INTO genre (name) VALUES
 ('Shonen'),
 ('Seinen'),
 ('Shojo');
@@ -133,7 +133,7 @@ INSERT INTO Type (name) VALUES
 ('Thriller');
 
 -- Insertion des images de profil
-INSERT INTO ProfilPicture (profil_picture) VALUES
+INSERT INTO profilpicture (profil_picture) VALUES
 ('https://mbfertyaeqebaqqcrryu.supabase.co/storage/v1/object/sign/profilpicture/connectedavatar.svg?token=eyJraWQiOiJzdG9yYWdlLXVybC1zaWduaW5nLWtleV9lZGE3ZDRmMy0xYWU0LTQ2ZTktOWIzZi01MmM3MjE5Mzg1MWMiLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJwcm9maWxwaWN0dXJlL2Nvbm5lY3RlZGF2YXRhci5zdmciLCJpYXQiOjE3NTIxMzIzNTgsImV4cCI6NDkwNTczMjM1OH0.0ABjsw40Fl9Mrkn1offOA4SjHz9QtkDw3DIa2rokUYs'),
 ('https://mbfertyaeqebaqqcrryu.supabase.co/storage/v1/object/sign/profilpicture/profilpicture.png?token=eyJraWQiOiJzdG9yYWdlLXVybC1zaWduaW5nLWtleV9lZGE3ZDRmMy0xYWU0LTQ2ZTktOWIzZi01MmM3MjE5Mzg1MWMiLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJwcm9maWxwaWN0dXJlL3Byb2ZpbHBpY3R1cmUucG5nIiwiaWF0IjoxNzUyMTMyMzc5LCJleHAiOjQ5MDU3MzIzNzl9.4T5W9N7-NB7OCMa_zObmDUiMNSwgq5nB-z8Rg7uQAxc'),
 ('https://mbfertyaeqebaqqcrryu.supabase.co/storage/v1/object/sign/profilpicture/profilpicture2.png?token=eyJraWQiOiJzdG9yYWdlLXVybC1zaWduaW5nLWtleV9lZGE3ZDRmMy0xYWU0LTQ2ZTktOWIzZi01MmM3MjE5Mzg1MWMiLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJwcm9maWxwaWN0dXJlL3Byb2ZpbHBpY3R1cmUyLnBuZyIsImlhdCI6MTc1MjEzMjM5MCwiZXhwIjo0OTA1NzMyMzkwfQ.BAYzBJZgohLyinJ89Nt_8TG2jqMNWYCXqQ-dN8b3c1Q'),
@@ -151,7 +151,7 @@ INSERT INTO users (firstname ,lastname, mail, password, is_admin, is_actif, abon
 ('Nathan', 'Durnerin', 'durnerin.nathan01@gmail.com', '$2b$08$UtoztNueI3QVTFR5sP3vY.cnUHXOXGqnFpkdt2Ce0TH5Pivpalmwa', TRUE, TRUE, 2, 1);
 
 -- Insertion des animes
-INSERT INTO Anime (title, synopsis, portrait, date, genre_id, paysage, video) VALUES
+INSERT INTO anime (title, synopsis, portrait, date, genre_id, paysage, video) VALUES
 ('Eclipse Chronicles', 'Dans un monde où la magie suit le cycle lunaire, une éclipse éternelle approche. Kaen, orphelin marqué par la Lune Sombre, hérite de la Moondrake Blade, une arme capable de briser les lois de l’univers. Pour empêcher le retour du Dieu-Dragon, il devra affronter des ordres secrets, sa propre malédiction… et percer le secret des Gardiens de l’Éclipse.', 'https://mbfertyaeqebaqqcrryu.supabase.co/storage/v1/object/sign/poster/portrait/eclipse_chronicle_portrait.png?token=eyJraWQiOiJzdG9yYWdlLXVybC1zaWduaW5nLWtleV9lZGE3ZDRmMy0xYWU0LTQ2ZTktOWIzZi01MmM3MjE5Mzg1MWMiLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJwb3N0ZXIvcG9ydHJhaXQvZWNsaXBzZV9jaHJvbmljbGVfcG9ydHJhaXQucG5nIiwiaWF0IjoxNzUxMzYzNDE2LCJleHAiOjIwNjY3MjM0MTZ9.nf6kEwESlxSNGlPi99_KpObHdRmQU3MBFCn3iY6xoZc',  '2025', 1, 'https://mbfertyaeqebaqqcrryu.supabase.co/storage/v1/object/sign/poster/paysage/eclipse_chronicle_paysage.webp?token=eyJraWQiOiJzdG9yYWdlLXVybC1zaWduaW5nLWtleV9lZGE3ZDRmMy0xYWU0LTQ2ZTktOWIzZi01MmM3MjE5Mzg1MWMiLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJwb3N0ZXIvcGF5c2FnZS9lY2xpcHNlX2Nocm9uaWNsZV9wYXlzYWdlLndlYnAiLCJpYXQiOjE3NTEzNjMyMjcsImV4cCI6MjA2NjcyMzIyN30.x-fSbJCBSdK0JH2mlQV5RpqIuFIvRixhI3GURiqAbIs', 'https://mbfertyaeqebaqqcrryu.supabase.co/storage/v1/object/sign/video/eclipsechronicles.mp4?token=eyJraWQiOiJzdG9yYWdlLXVybC1zaWduaW5nLWtleV9lZGE3ZDRmMy0xYWU0LTQ2ZTktOWIzZi01MmM3MjE5Mzg1MWMiLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJ2aWRlby9lY2xpcHNlY2hyb25pY2xlcy5tcDQiLCJpYXQiOjE3NTEzNjQ4NTYsImV4cCI6MjA2NjcyNDg1Nn0.Qz66JtS6qR-Av9CXcQUj1Hv1EeY2uZNLXa5rwp-vcdk'),
 ('Tidebound Legacy', 'Dans un monde où les océans renferment d’anciens pouvoirs, Lior Héritage, jeune corsaire, découvre qu’il est l’héritier d’une lignée capable de maîtriser les marées. Pour libérer son île des flottes impériales et percer le secret du Tidebound, il devra affronter trahisons, alliances dangereuses… et les esprits des mers.', 'https://mbfertyaeqebaqqcrryu.supabase.co/storage/v1/object/sign/poster/portrait/tideboundlegacyportrait.png?token=eyJraWQiOiJzdG9yYWdlLXVybC1zaWduaW5nLWtleV9lZGE3ZDRmMy0xYWU0LTQ2ZTktOWIzZi01MmM3MjE5Mzg1MWMiLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJwb3N0ZXIvcG9ydHJhaXQvdGlkZWJvdW5kbGVnYWN5cG9ydHJhaXQucG5nIiwiaWF0IjoxNzUxMzYzNDUxLCJleHAiOjIwNjY3MjM0NTF9.45eqc6Kl1Vq_WtXxKoG2DVrFSNs36-7_OqRn1zsrEVU', '2025', 1, 'https://mbfertyaeqebaqqcrryu.supabase.co/storage/v1/object/sign/poster/paysage/tideboundlegacycrimsonhorizonsPAYSAGE.png?token=eyJraWQiOiJzdG9yYWdlLXVybC1zaWduaW5nLWtleV9lZGE3ZDRmMy0xYWU0LTQ2ZTktOWIzZi01MmM3MjE5Mzg1MWMiLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJwb3N0ZXIvcGF5c2FnZS90aWRlYm91bmRsZWdhY3ljcmltc29uaG9yaXpvbnNQQVlTQUdFLnBuZyIsImlhdCI6MTc1MTM2MzQ1OCwiZXhwIjoyMDY2NzIzNDU4fQ.LkrYrSD52czCZnBv49LSEpxot7w5ngY0vuP75DF54AI', 'https://mbfertyaeqebaqqcrryu.supabase.co/storage/v1/object/sign/video/tideboundlegacy.mp4?token=eyJraWQiOiJzdG9yYWdlLXVybC1zaWduaW5nLWtleV9lZGE3ZDRmMy0xYWU0LTQ2ZTktOWIzZi01MmM3MjE5Mzg1MWMiLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJ2aWRlby90aWRlYm91bmRsZWdhY3kubXA0IiwiaWF0IjoxNzUxMzY0ODc0LCJleHAiOjIwNjY3MjQ4NzR9.abJwmEJMY1Su-vPSC4YGh6NT7C5tLlf6JvtDc6oRXL4'),
 ('Chronique de l’Arbre-Dieu','Dans un monde brisé par les guerres magiques, l’Arbre-Dieu, source d’une énergie nommée Vitae, pousse au cœur d’Isvarah, ultime cité humaine. Le Vitae peut guérir ou ressusciter… mais consume l’âme. Kael, ancien soldat mutilé, est choisi comme Gardien de l’Arbre. Face aux fanatiques, aux survivants désespérés et à sa propre foi en l’humanité, il devra choisir : protéger le monde… ou le laisser s’éteindre.','https://mbfertyaeqebaqqcrryu.supabase.co/storage/v1/object/sign/poster/portrait/Chronique%20de%20larbre%20portrait.png?token=eyJraWQiOiJzdG9yYWdlLXVybC1zaWduaW5nLWtleV9lZGE3ZDRmMy0xYWU0LTQ2ZTktOWIzZi01MmM3MjE5Mzg1MWMiLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJwb3N0ZXIvcG9ydHJhaXQvQ2hyb25pcXVlIGRlIGxhcmJyZSBwb3J0cmFpdC5wbmciLCJpYXQiOjE3NTEzNjUxNzYsImV4cCI6MjA2NjcyNTE3Nn0.wjdVHR_Ipvb-cDyYzw2qz7muIkbGdKGNk1IBqhZfY3Y','2012',2,'https://mbfertyaeqebaqqcrryu.supabase.co/storage/v1/object/sign/poster/paysage/Chronique%20de%20larbre.png?token=eyJraWQiOiJzdG9yYWdlLXVybC1zaWduaW5nLWtleV9lZGE3ZDRmMy0xYWU0LTQ2ZTktOWIzZi01MmM3MjE5Mzg1MWMiLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJwb3N0ZXIvcGF5c2FnZS9DaHJvbmlxdWUgZGUgbGFyYnJlLnBuZyIsImlhdCI6MTc1MTM2NDk0NSwiZXhwIjoyMDY2NzI0OTQ1fQ.H5YNqD6sEdFjgwnKF7LYroAnsqv3bOGAtDirMcMTibw', 'https://mbfertyaeqebaqqcrryu.supabase.co/storage/v1/object/sign/video/arbre-dieu.mp4?token=eyJraWQiOiJzdG9yYWdlLXVybC1zaWduaW5nLWtleV9lZGE3ZDRmMy0xYWU0LTQ2ZTktOWIzZi01MmM3MjE5Mzg1MWMiLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJ2aWRlby9hcmJyZS1kaWV1Lm1wNCIsImlhdCI6MTc1MTM2NTI3MywiZXhwIjoyMDY2NzI1MjczfQ.8mAXD8KbHVvnxUi2OQ2ph_yFptb87rmYiSjN_Tw8LyA'),
@@ -176,7 +176,7 @@ Au cœur de cette ville rongée par la peur et les complots, Kaito, un adolescen
 ('Sound Between the Strings', 'Airi, élève discrète, a cessé de jouer du violon depuis l’accident de son frère. Sa rencontre avec Riku, pianiste lumineux, et Hiro, violoncelliste introverti, l’entraîne dans un atelier de musique improvisée où chaque note devient émotion. Entre harmonies fragiles, souvenirs enfouis et sentiments croisés, le trio découvre que la musique ne guérit pas toujours — parfois, elle révèle ce qu’on cache.', 'https://mbfertyaeqebaqqcrryu.supabase.co/storage/v1/object/sign/poster/portrait/Sound%20Between%20the%20Stringsportrait.png?token=eyJraWQiOiJzdG9yYWdlLXVybC1zaWduaW5nLWtleV9lZGE3ZDRmMy0xYWU0LTQ2ZTktOWIzZi01MmM3MjE5Mzg1MWMiLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJwb3N0ZXIvcG9ydHJhaXQvU291bmQgQmV0d2VlbiB0aGUgU3RyaW5nc3BvcnRyYWl0LnBuZyIsImlhdCI6MTc1MTM2NDE1NSwiZXhwIjoyMDY2NzI0MTU1fQ.6lw38ghPnIffW4doZpFHyL_1DQ-s-puavDLarHenNrU', '2006', 3, 'https://mbfertyaeqebaqqcrryu.supabase.co/storage/v1/object/sign/poster/paysage/Sound%20Between%20the%20Stringspaysage%20(1).png?token=eyJraWQiOiJzdG9yYWdlLXVybC1zaWduaW5nLWtleV9lZGE3ZDRmMy0xYWU0LTQ2ZTktOWIzZi01MmM3MjE5Mzg1MWMiLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJwb3N0ZXIvcGF5c2FnZS9Tb3VuZCBCZXR3ZWVuIHRoZSBTdHJpbmdzcGF5c2FnZSAoMSkucG5nIiwiaWF0IjoxNzUxMzY0NDExLCJleHAiOjIwNjY3MjQ0MTF9.yyZ1Msaluba4cXT86EpOfquN_qBuB6KPIMoqsbcsdXQ', 'https://mbfertyaeqebaqqcrryu.supabase.co/storage/v1/object/sign/video/soundbetweenthestringextrait1%20(2).mp4?token=eyJraWQiOiJzdG9yYWdlLXVybC1zaWduaW5nLWtleV9lZGE3ZDRmMy0xYWU0LTQ2ZTktOWIzZi01MmM3MjE5Mzg1MWMiLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJ2aWRlby9zb3VuZGJldHdlZW50aGVzdHJpbmdleHRyYWl0MSAoMikubXA0IiwiaWF0IjoxNzUxMzY0OTk4LCJleHAiOjE3ODI5MDA5OTh9.AZNmdWSPgdGimZzojpbdBCMExqFinf7k_4G9u6VLodY');
 
 -- Insertion des notes
-INSERT INTO Note (users_id, anime_id, note) VALUES 
+INSERT INTO note (users_id, anime_id, note) VALUES 
 (3, 1, 4),
 (3, 2, 5),
 (3, 3, 3),
@@ -219,7 +219,7 @@ INSERT INTO Note (users_id, anime_id, note) VALUES
 (1, 20, 2);
 
 -- Insertion des saisons
-INSERT INTO Season (number, anime_id) VALUES
+INSERT INTO season (number, anime_id) VALUES
 (01, 1), (02, 1), (03, 1),
 (01, 2), (02, 2), (03, 2),
 (01, 3), (02, 3), (03, 3),
@@ -242,7 +242,7 @@ INSERT INTO Season (number, anime_id) VALUES
 (01, 20);
 
 -- Insertion des épisodes
-INSERT INTO Episode (id, number, title, synopsis, season_id) VALUES
+INSERT INTO episode (id, number, title, synopsis, season_id) VALUES
  (1, 01, 'La Marque d’Orin', 'Orin, jeune orphelin d’un village minier, cache une marque noire en forme de croissant sur sa poitrine. Lors d’une nuit d’alignement lunaire, une explosion magique détruit un autel ancien. Orin survit miraculeusement, tandis qu’une étrange voix l’appelle dans ses rêves.', 1), 
  (2, 02, 'Lame tombée du ciel', 'Fuyant les soupçons, Orin se réfugie dans les ruines de l’ancien observatoire céleste. Là, il découvre la Moondrake Blade, une épée scellée dans une stèle d’obsidienne lunaire. En la libérant, il déclenche un souffle d’énergie… et réveille des chasseurs de l’Ordre de l’Aube Crochue.', 1), 
  (3, 03, 'L\'Étrangère aux cartes', 'Orin est sauvé par Lyssa, une liseuse lunaire capable d\'interpréter le flux magique des lunes. Elle comprend que la Moondrake ne réagit qu’aux marqués de la Lune Sombre — des êtres considérés comme maudits, mais essentiels à la prophétie des Gardiens disparus.', 1), 
@@ -613,7 +613,7 @@ INSERT INTO Episode (id, number, title, synopsis, season_id) VALUES
  (368, 10, 'En harmonie', 'Airi monte sur scène seule, interprétant leur composition. Dans la salle, deux regards croisés… et une note suspendue.', 45);
 
 -- Insertion des anime_type
-INSERT INTO Anime_type (type_id, anime_id) VALUES
+INSERT INTO anime_type (type_id, anime_id) VALUES
 (4, 1), (1, 1), (3, 1),
 (4, 2), (1, 2),
 (2, 3), (3, 3), (4, 3),

@@ -14,7 +14,7 @@ class AbonnementRepository {
   async create(abonnement: Omit<Abonnement, "id">) {
     // Création d'un nouvel abonnement
     const [result] = await databaseClient.query<Result>(
-      "INSERT INTO Abonnement (name) values (?)",
+      "INSERT INTO abonnement (name) values (?)",
       [abonnement.name],
     );
     //Retourne l'ID du nouvel abonnement inséré
@@ -24,7 +24,7 @@ class AbonnementRepository {
   async read(id: number) {
     // Execute la requête SQL pour lire un item spécifique par son ID
     const [rows] = await databaseClient.query<Rows>(
-      "select * from Abonnement where id = ?",
+      "select * from abonnement where id = ?",
       [id],
     );
     //Retourne la première ligne du résultat de la requête
@@ -32,7 +32,7 @@ class AbonnementRepository {
   }
   async readAll() {
     // Exécute la requête SQL pour lire tout le tableau de la table "Abonnement"
-    const [rows] = await databaseClient.query<Rows>("select * from Abonnement");
+    const [rows] = await databaseClient.query<Rows>("select * from abonnement");
 
     // Return the array of items
     return rows as Abonnement[];
@@ -42,7 +42,7 @@ class AbonnementRepository {
   async update(abonnement: Abonnement) {
     // Exécute la requête SQL pour lire tout le tableau de la table "Abonnement"
     const [result] = await databaseClient.query<Result>(
-      "UPDATE Abonnement set name = ? WHERE id = ?",
+      "UPDATE abonnement set name = ? WHERE id = ?",
       [abonnement.name, abonnement.id],
     );
 
@@ -54,7 +54,7 @@ class AbonnementRepository {
   async delete(id: number) {
     // Exécute la requête SQL pour supprimer un abonnement spécifique par son ID
     const [result] = await databaseClient.query<Result>(
-      "DELETE FROM Abonnement WHERE id = ?",
+      "DELETE FROM abonnement WHERE id = ?",
       [id],
     );
     // Retourne le nombre de lignes affectées par la suppression

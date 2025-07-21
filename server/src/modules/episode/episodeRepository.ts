@@ -15,7 +15,7 @@ class EpisodeRepository {
   async create(episode: Omit<Episode, "id">) {
     // Création d'un nouvel episode
     const [result] = await databaseClient.query<Result>(
-      "INSERT INTO Episode (number, title, synopsis, season_id) VALUES (?, ?, ?, ?)",
+      "INSERT INTO episode (number, title, synopsis, season_id) VALUES (?, ?, ?, ?)",
       [episode.number, episode.title, episode.synopsis, episode.season_id],
     );
     // Retourne l'ID du nouvel episode inséré
@@ -26,7 +26,7 @@ class EpisodeRepository {
   async read(id: number) {
     // Exécute la requête SQL pour lire un episode spécifique par son ID
     const [rows] = await databaseClient.query<Rows>(
-      "SELECT * FROM Episode WHERE id = ?",
+      "SELECT * FROM episode WHERE id = ?",
       [id],
     );
     // Retourne la première ligne du résultat de la requête
@@ -35,7 +35,7 @@ class EpisodeRepository {
 
   async readAll() {
     // Exécute la requête SQL pour lire tous les episodes
-    const [rows] = await databaseClient.query<Rows>("SELECT * FROM Episode");
+    const [rows] = await databaseClient.query<Rows>("SELECT * FROM episode");
     // Retourne le tableau des episodes
     return rows as Episode[];
   }
@@ -44,7 +44,7 @@ class EpisodeRepository {
   async update(episode: Episode) {
     // Exécute la requête SQL pour mettre à jour un episode existant
     const [result] = await databaseClient.query<Result>(
-      "UPDATE Episode SET number = ?, title = ?, synopsis = ?, season_id = ? WHERE id = ?",
+      "UPDATE episode SET number = ?, title = ?, synopsis = ?, season_id = ? WHERE id = ?",
       [
         episode.number,
         episode.title,
@@ -60,7 +60,7 @@ class EpisodeRepository {
   async delete(id: number) {
     // Exécute la requête SQL pour supprimer un episode par son ID
     const [result] = await databaseClient.query<Result>(
-      "DELETE FROM Episode WHERE id = ?",
+      "DELETE FROM episode WHERE id = ?",
       [id],
     );
     return result.affectedRows > 0; // Retourne true si la suppression a réussi
