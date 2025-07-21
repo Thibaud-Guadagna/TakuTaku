@@ -10,7 +10,7 @@ import "../database/checkConnection";
 import app from "./app";
 
 // Get the port from the environment variables
-const port = Number(process.env.PORT);
+const port = Number(process.env.PORT) || 3310;
 
 // Start the server and listen on the specified port
 app
