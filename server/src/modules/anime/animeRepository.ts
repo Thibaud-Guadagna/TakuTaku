@@ -40,7 +40,7 @@ class AnimeRepository {
   async read(id: number) {
     // Récupère l'animé
     const [animeRows] = await databaseClient.query<Rows>(
-      "SELECT * FROM Anime WHERE id = ?",
+      "SELECT * FROM anime WHERE id = ?",
       [id],
     );
     // Vérifie si l'animé existe
