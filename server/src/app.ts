@@ -15,16 +15,18 @@ const app = express();
 // You may find the following magic line in forums:
 
 //app.use(cors());
+console.log("CORS autorisé pour :", process.env.CLIENT_URL);
 
 // You should NOT do that: such code uses the `cors` module to allow all origins, which can pose security issues.
 // For this pedagogical template, the CORS code allows CLIENT_URL in development mode (when process.env.CLIENT_URL is defined).
+const corsOptions = {
+  origin: process.env.CLIENT_URL || "*",
+  credentials: true
+};
 
+app.use(cors(corsOptions));
+app.options("*", cors(corsOptions));
 
-
-if (process.env.CLIENT_URL != null) {
-  app.use(cors({ origin: process.env.CLIENT_URL}));
-  app.options("*", cors());
-}
 // Accept all OPTIONS preflight requests
 
 
