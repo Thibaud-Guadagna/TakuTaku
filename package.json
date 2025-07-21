@@ -40,7 +40,8 @@
   },
   "dependencies": {
     "@tailwindcss/vite": "^4.1.8",
-    "dotenv": "^16.5.0",
+    "bcryptjs": "^3.0.2",
+    "dotenv": "^16.6.1",
     "framer-motion": "^12.16.0",
     "lucide": "^0.513.0",
     "react-router": "^7.6.2",
